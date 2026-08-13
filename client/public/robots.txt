@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /my-notes/
+Disallow: /my-bookmarks/
+Disallow: /notifications/
+
+Sitemap: https://aigurunepal.com/sitemap.xml

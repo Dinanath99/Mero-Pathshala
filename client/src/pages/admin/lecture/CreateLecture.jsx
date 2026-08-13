@@ -33,15 +33,14 @@ const CreateLecture = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      setLectureTitle("");
       refetch();
-      toast.success(data.message);
+      toast.success(data?.message || "Lecture created successfully");
     }
     if (error) {
-      toast.error(error.data.message);
+      toast.error(error?.data?.message || "Failed to create lecture");
     }
   }, [isSuccess, error]);
-
-  console.log(lectureData);
 
   return (
     <div className="flex-1 mx-10">
@@ -49,9 +48,8 @@ const CreateLecture = () => {
         <h1 className="font-bold text-xl">
           Let's add lectures, add some basic details for your new lecture
         </h1>
-        <p className="text-sm">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus,
-          laborum!
+        <p className="text-sm text-gray-500">
+          Create modules and lectures for your course. You can upload videos and materials on the next step.
         </p>
       </div>
       <div className="space-y-4">
@@ -71,7 +69,7 @@ const CreateLecture = () => {
           >
             Back to course
           </Button>
-          <Button disabled={isLoading} onClick={createLectureHandler}>
+          <Button disabled={isLoading || !lectureTitle.trim()} onClick={createLectureHandler}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -84,11 +82,11 @@ const CreateLecture = () => {
         </div>
         <div className="mt-10">
           {lectureLoading ? (
-            <p>Loading lectures...</p>
+            <p className="text-sm text-gray-500">Loading lectures...</p>
           ) : lectureError ? (
-            <p>Failed to load lectures.</p>
-          ) : lectureData.lectures.length === 0 ? (
-            <p>No lectures availabe</p>
+            <p className="text-sm text-red-500">Failed to load lectures.</p>
+          ) : !lectureData?.lectures || lectureData.lectures.length === 0 ? (
+            <p className="text-sm text-gray-500">No lectures available yet. Create one above!</p>
           ) : (
             lectureData.lectures.map((lecture, index) => (
               <Lecture

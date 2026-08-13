@@ -9,11 +9,11 @@ router.route("/recommend").get(isAuthenticated, recommendCourses);
 router.route("/collaborative").get(recommendCollaborativeCourses)
 router.route("/trending").get(getTrendingCourses)
 router.route("/").post(isAuthenticated,createCourse);
-router.route("/search").get(isAuthenticated, searchCourse);
-router.route("/published-courses").get( getPublishedCourse);
-router.route("/").get(isAuthenticated,getCreatorCourses);
-router.route("/:courseId").put(isAuthenticated,upload.single("courseThumbnail"),editCourse);
-router.route("/:courseId").get(isAuthenticated, getCourseById);
+router.route("/search").get(searchCourse);
+router.route("/published-courses").get(getPublishedCourse);
+router.route("/").get(isAuthenticated, getCreatorCourses);
+router.route("/:courseId").put(isAuthenticated, upload.single("courseThumbnail"), editCourse);
+router.route("/:courseId").get(getCourseById);
 router.route("/:courseId/lecture").post(isAuthenticated, createLecture);
 router.route("/:courseId/lecture").get(isAuthenticated, getCourseLecture);
 router.route("/:courseId/lecture/:lectureId").post(isAuthenticated, editLecture);

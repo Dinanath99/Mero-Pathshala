@@ -15,7 +15,7 @@ const Dashboard = () => {
         "http://localhost:8080/api/v1/recommendations/recommend",
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       setCourses(res.data.recommendedCourses);
     } catch (error) {
