@@ -324,14 +324,28 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-blue-500 selection:text-white">
       <Navbar />
-      <div className="flex-1 mt-16 px-4 sm:px-8 lg:px-12">
+      <main className="flex-1 pt-16">
         <Outlet />
-      </div>
+      </main>
 
       <Dialog open={openModal}>
-        <DialogContent className="max-w-lg sm:max-w-3xl bg-white rounded-2xl shadow-2xl p-8">
+        <DialogContent className="max-w-lg sm:max-w-3xl bg-card text-card-foreground border border-border/80 rounded-2xl shadow-2xl p-6 sm:p-8">
+          {/* Step Progress Indicator */}
+          <div className="w-full mb-6">
+            <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+              <span>Personalization Onboarding</span>
+              <span>Step {step + 1} of 5</span>
+            </div>
+            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-300 rounded-full"
+                style={{ width: `${((step + 1) / 5) * 100}%` }}
+              />
+            </div>
+          </div>
+
           <DialogHeader>
             <AnimatePresence mode="wait">
               <motion.div
@@ -340,45 +354,47 @@ const MainLayout = () => {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={{ duration: 0.4, ease: "easeInOut" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
               >
                 {renderStep()}
               </motion.div>
             </AnimatePresence>
           </DialogHeader>
 
-          <DialogFooter className="mt-8 flex justify-between">
+          <DialogFooter className="mt-8 flex justify-between gap-3">
             {step > 0 && (
               <Button
                 variant="outline"
                 onClick={handlePrev}
-                className="border-gray-300 text-gray-700 bg-white hover:bg-gray-100 rounded-lg py-3 px-6"
+                className="rounded-xl border-border text-foreground hover:bg-accent font-medium py-2.5 px-5"
               >
                 Back
               </Button>
             )}
-            {step < 4 ? (
-              <Button
-                onClick={handleNext}
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 rounded-lg py-3 px-6"
-              >
-                Next
-              </Button>
-            ) : (
-              <Button
-                onClick={handleSubmit}
-                disabled={isLoading}
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 rounded-lg py-3 px-6"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Saving...
-                  </>
-                ) : (
-                  "Save & Continue"
-                )}
-              </Button>
-            )}
+            <div className="ml-auto flex items-center gap-3">
+              {step < 4 ? (
+                <Button
+                  onClick={handleNext}
+                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium py-2.5 px-6 shadow-sm transition"
+                >
+                  Next Step
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium py-2.5 px-6 shadow-sm transition"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving Preferences...
+                    </>
+                  ) : (
+                    "Complete Setup"
+                  )}
+                </Button>
+              )}
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>

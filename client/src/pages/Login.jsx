@@ -363,7 +363,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Select,
@@ -403,6 +403,10 @@ const Login = () => {
   ] = useLoginUserMutation();
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("redirectTo") || location.state?.from || "/";
 
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
@@ -461,7 +465,7 @@ const Login = () => {
       if (registerData.token && registerData.user) {
         localStorage.setItem("token", registerData.token);
         localStorage.setItem("user", JSON.stringify(registerData.user));
-        navigate("/");
+        navigate(redirectTo);
       } else {
         navigate("/login");
       }
@@ -478,7 +482,7 @@ const Login = () => {
       if (loginData.token && loginData.user) {
         localStorage.setItem("token", loginData.token);
         localStorage.setItem("user", JSON.stringify(loginData.user));
-        navigate("/");
+        navigate(redirectTo);
       } else {
         toast.error("Invalid login response");
       }
@@ -489,7 +493,7 @@ const Login = () => {
     if (loginError) {
       toast.error(loginError?.data?.message || "Login failed");
     }
-  }, [registerIsSuccess, registerData, registerError, loginIsSuccess, loginData, loginError, navigate]);
+  }, [registerIsSuccess, registerData, registerError, loginIsSuccess, loginData, loginError, navigate, redirectTo]);
 
   return (
     <div className="flex items-center w-full justify-center mt-20">

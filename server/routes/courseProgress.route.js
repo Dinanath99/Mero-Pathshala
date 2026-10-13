@@ -1,12 +1,29 @@
-import express from "express"
+import express from "express";
+import {
+  getCourseProgress,
+  markAsCompleted,
+  markAsInCompleted,
+  updateLectureProgress,
+} from "../controllers/courseProgress.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import { getCourseProgress, markAsCompleted, markAsInCompleted, updateLectureProgress } from "../controllers/courseProgress.controller.js";
+import { requireCourseEnrollment } from "../middlewares/requireCourseEnrollment.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route("/:courseId").get(isAuthenticated, getCourseProgress);
-router.route("/:courseId/lecture/:lectureId/view").post(isAuthenticated, updateLectureProgress);
-router.route("/:courseId/complete").post(isAuthenticated, markAsCompleted);
-router.route("/:courseId/incomplete").post(isAuthenticated, markAsInCompleted);
+router
+  .route("/:courseId")
+  .get(isAuthenticated, requireCourseEnrollment, getCourseProgress);
+
+router
+  .route("/:courseId/lecture/:lectureId/view")
+  .post(isAuthenticated, requireCourseEnrollment, updateLectureProgress);
+
+router
+  .route("/:courseId/complete")
+  .post(isAuthenticated, requireCourseEnrollment, markAsCompleted);
+
+router
+  .route("/:courseId/incomplete")
+  .post(isAuthenticated, requireCourseEnrollment, markAsInCompleted);
 
 export default router;

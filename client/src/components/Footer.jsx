@@ -1,77 +1,141 @@
-// components/Footer.jsx
+import React from "react";
 import { Link } from "react-router-dom";
-import { Github, Facebook, Linkedin } from "lucide-react";
+import { Github, Instagram, Youtube, Linkedin, ArrowUpRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 py-10 md:flex md:justify-between md:items-start grid grid-cols-1 gap-8">
-        {/* Left - Logo and tagline */}
-        <div>
-          <h2 className="text-2xl font-bold text-blue-600 dark:text-white">
-            MeroPathshala
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-sm">
-            Empower your learning journey with top-notch online courses.
-          </p>
-        </div>
+    <footer className="bg-[#0B0C0E] text-slate-400 border-t border-slate-900 mt-auto">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
+          {/* Jodne-style Brand & Tagline */}
+          <div className="md:col-span-5 flex flex-col gap-4">
+            <Link to="/" className="flex items-center gap-2 group w-fit">
+              <div className="w-8 h-8 rounded-full bg-[#FF5533] text-white flex items-center justify-center font-black text-sm shadow-md">
+                M
+              </div>
+              <span className="font-extrabold text-xl tracking-tight text-white flex items-center">
+                MeroPathshala<span className="w-2 h-2 rounded-full bg-[#FF5533] inline-block ml-0.5" />
+              </span>
+            </Link>
+            <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
+              The creator-student collaboration e-learning platform. Direct course access, smart AI matching, zero middlemen. "Pathshala" means school.
+            </p>
+            <div className="flex items-center gap-3 mt-2">
+              <a
+                href="https://github.com/Dinanath99/meropathsala"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#FF5533] transition-colors"
+                aria-label="GitHub Repository"
+              >
+                <Github size={16} />
+              </a>
+              <a
+                href="#"
+                className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#FF5533] transition-colors"
+              >
+                <Instagram size={16} />
+              </a>
+              <a
+                href="#"
+                className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#FF5533] transition-colors"
+              >
+                <Youtube size={16} />
+              </a>
+            </div>
+          </div>
 
-        {/* Middle - Navigation Links */}
-        <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-gray-800 dark:text-white">
-            Quick Links
-          </h3>
-          <Link
-            to="/"
-            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            Home
-          </Link>
-          <Link
-            to="/course/search?query="
-            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            Courses
-          </Link>
-          <Link
-            to="/profile"
-            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            Profile
-          </Link>
-          <Link
-            to="/about"
-            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            About Us
-          </Link>
-        </div>
+          {/* Platform Column */}
+          <div className="md:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              PLATFORM
+            </h4>
+            <ul className="flex flex-col gap-2.5 text-xs font-semibold">
+              <li>
+                <Link to="/course/search" className="hover:text-white transition-colors">
+                  Browse Courses
+                </Link>
+              </li>
+              <li>
+                <Link to="/my-learning" className="hover:text-white transition-colors">
+                  My Learning
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/dashboard" className="hover:text-white transition-colors">
+                  Instructor Studio
+                </Link>
+              </li>
+              <li>
+                <Link to="/course/search?query=AI" className="hover:text-white transition-colors">
+                  AI Assistant
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Right - Social and contact */}
-        <div>
-          <h3 className="font-semibold text-gray-800 dark:text-white mb-2">
-            Follow Us
-          </h3>
-          <div className="flex space-x-4">
-            <a
-              href="https://github.com/Dinanath99/meropathsala"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-            >
-              <Github />
-            </a>
-            
-            
+          {/* Resources Column */}
+          <div className="md:col-span-2 flex flex-col gap-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              RESOURCES
+            </h4>
+            <ul className="flex flex-col gap-2.5 text-xs font-semibold">
+              <li>
+                <Link to="/" className="hover:text-white transition-colors">
+                  How it works
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="hover:text-white transition-colors">
+                  About MeroPathshala
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="hover:text-white transition-colors">
+                  Success Stories
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Column */}
+          <div className="md:col-span-3 flex flex-col gap-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              LEGAL & SUPPORT
+            </h4>
+            <ul className="flex flex-col gap-2.5 text-xs font-semibold">
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Terms of Service
+                </a>
+              </li>
+              <li className="pt-2 text-slate-500 font-mono text-[11px]">
+                support@meropathshala.edu.np
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <div className="border-t dark:border-gray-700 mt-8 pt-4 text-center text-sm text-gray-500 dark:text-gray-400">
-        &copy; {new Date().getFullYear()} MeroPathshala. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="border-t border-slate-900 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>&copy; {new Date().getFullYear()} MeroPathshala Platform. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-slate-300 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Nepal's Premier Learning Hub
+            </span>
+          </div>
+        </div>
       </div>
     </footer>
   );
 };
 
 export default Footer;
+
+

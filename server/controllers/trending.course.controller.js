@@ -1,40 +1,67 @@
 import { CoursePurchase } from "../models/coursePurchase.model.js";
+import { Enrollment } from "../models/enrollment.model.js";
 import { Course } from "../models/course.model.js";
 
 export const getTrendingCourses = async (req, res) => {
   try {
-    // Aggregate CoursePurchases with status 'completed' and group by courseId
-    const purchasedCourses = await CoursePurchase.aggregate([
-      { $match: { status: "completed" } }, // only successful purchases
+    const activeEnrollments = await Enrollment.aggregate([
+      { $match: { status: "active" } },
       {
         $group: {
           _id: "$courseId",
-          purchaseCount: { $sum: 1 },
+          count: { $sum: 1 },
         },
       },
-      { $match: { purchaseCount: { $gte: 2 } } }, // only courses bought by 2 or more users
-      { $sort: { purchaseCount: -1 } },
-      { $limit: 10 }, // top 10 trending courses
     ]);
 
-    // Extract courseIds from aggregation result
-    const courseIds = purchasedCourses.map((c) => c._id);
+    const legacyPurchases = await CoursePurchase.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: "$courseId",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 
-    // Find course details for these courseIds and isPublished = true
-    const courses = await Course.find({
-      _id: { $in: courseIds },
-      isPublished: true,
-    }).lean();
+    const countMap = new Map();
+    activeEnrollments.forEach((item) => {
+      if (item._id) {
+        const idStr = item._id.toString();
+        countMap.set(idStr, (countMap.get(idStr) || 0) + item.count);
+      }
+    });
 
-    // To maintain order by purchaseCount descending,
-    // map courses with purchaseCount and sort manually
+    legacyPurchases.forEach((item) => {
+      if (item._id) {
+        const idStr = item._id.toString();
+        countMap.set(idStr, (countMap.get(idStr) || 0) + item.count);
+      }
+    });
+
+    let topCourseIds = Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([id]) => id);
+
+    let courses = [];
+    if (topCourseIds.length > 0) {
+      courses = await Course.find({
+        _id: { $in: topCourseIds },
+        isPublished: true,
+      }).lean();
+    }
+
+    // Fallback: If no enrollments exist yet, return top published courses
+    if (courses.length === 0) {
+      courses = await Course.find({ isPublished: true }).limit(6).lean();
+    }
+
     const coursesWithCount = courses.map((course) => {
-      const purchaseInfo = purchasedCourses.find(
-        (c) => c._id.toString() === course._id.toString()
-      );
+      const cId = course._id.toString();
       return {
         ...course,
-        purchaseCount: purchaseInfo ? purchaseInfo.purchaseCount : 0,
+        purchaseCount: countMap.get(cId) || (course.enrolledStudents ? course.enrolledStudents.length : 0),
       };
     });
 

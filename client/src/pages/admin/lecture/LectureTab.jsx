@@ -17,7 +17,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const MEDIA_API = "http://localhost:8080/api/v1/media";
+import { API_BASE_URL } from "@/config/api";
+
+const MEDIA_API = `${API_BASE_URL}/media`;
+
 
 const LectureTab = () => {
   const [lectureTitle, setLectureTitle] = useState("");
@@ -52,6 +55,7 @@ const LectureTab = () => {
       setMediaProgress(true);
       try {
         const res = await axios.post(`${MEDIA_API}/upload-video`, formData, {
+          withCredentials: true,
           onUploadProgress: ({ loaded, total }) => {
             setUploadProgress(Math.round((loaded * 100) / total));
           },

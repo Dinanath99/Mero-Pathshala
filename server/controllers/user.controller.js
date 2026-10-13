@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken.js";
 import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
+import { linkPendingEnrollmentToUser } from "../services/enrollment.service.js";
 
 export const register = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ export const register = async (req, res) => {
     }
 
     // Validate role
-    if (!["student", "instructor"].includes(role)) {
+    if (!["student", "instructor", "admin"].includes(role)) {
       return res.status(400).json({
         success: false,
         message: "Invalid role value.",
@@ -34,12 +35,14 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
+    const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
       role,
     });
+
+    await linkPendingEnrollmentToUser(newUser);
 
     return res.status(201).json({
       success: true,
@@ -93,6 +96,8 @@ export const login = async (req, res) => {
       });
     }
 
+    await linkPendingEnrollmentToUser(user);
+
     // Generate token and send cookie (assuming your generateToken sets the cookie)
     generateToken(res, user, `Welcome back ${user.name}`);
   } catch (error) {
@@ -131,6 +136,8 @@ export const getUserProfile = async (req, res) => {
         success: false,
       });
     }
+    await linkPendingEnrollmentToUser(user);
+
     return res.status(200).json({
       success: true,
       user,
