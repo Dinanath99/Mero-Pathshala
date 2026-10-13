@@ -34,7 +34,7 @@ const enrollmentSchema = new mongoose.Schema(
     },
     source: {
       type: String,
-      enum: ["google_form", "manual_admin", "legacy_purchase"],
+      enum: ["google_form", "manual_admin", "legacy_purchase", "esewa", "free_enrollment"],
       default: "google_form",
     },
     enrolledAt: {

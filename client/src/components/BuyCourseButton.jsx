@@ -1,68 +1,135 @@
-import React from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useGetCourseEnrollmentStatusQuery } from "@/features/api/enrollmentApi";
-import { Loader2, ExternalLink, CheckCircle2, Clock, RotateCcw } from "lucide-react";
+import {
+  useGetCourseDetailWithStatusQuery,
+  useInitiateCoursePaymentMutation,
+} from "@/features/api/purchaseApi";
+import {
+  Loader2,
+  CheckCircle2,
+  Clock,
+  CreditCard,
+  Sparkles,
+} from "lucide-react";
 
-const DEFAULT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc_EXAMPLE_FORM_ID/viewform";
-
-const BuyCourseButton = ({ courseId }) => {
+const BuyCourseButton = ({ courseId, course: propCourse, purchased: propPurchased }) => {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth || {});
 
-  const { data: statusData, isLoading } = useGetCourseEnrollmentStatusQuery(courseId, {
-    skip: !courseId,
-  });
+  // Fetch enrollment status and course details if not passed as props
+  const { data: statusData, isLoading: isStatusLoading } =
+    useGetCourseEnrollmentStatusQuery(courseId, { skip: !courseId });
 
-  const status = statusData?.status || "none";
+  const { data: detailData, isLoading: isDetailLoading } =
+    useGetCourseDetailWithStatusQuery(courseId, {
+      skip: Boolean(propCourse && propPurchased !== undefined),
+    });
 
-  const getFormUrl = () => {
-    const baseUrl =
-      import.meta.env.VITE_GOOGLE_ENROLLMENT_FORM_URL || DEFAULT_FORM_URL;
-    const url = new URL(baseUrl);
-    url.searchParams.set("usp", "pp_url");
-    url.searchParams.set("courseId", courseId);
-    if (user?.email) {
-      url.searchParams.set("email", user.email);
+  const [initiatePayment, { isLoading: isInitiating }] =
+    useInitiateCoursePaymentMutation();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const course = propCourse || detailData?.course;
+  const isDirectlyPurchased =
+    propPurchased !== undefined ? propPurchased : detailData?.purchased;
+  const enrollmentStatus = statusData?.status || "none";
+
+  const isEnrolled =
+    Boolean(isDirectlyPurchased) || enrollmentStatus === "active";
+  const coursePrice = Number(course?.coursePrice) || 0;
+  const isFree = coursePrice <= 0;
+
+  const handleEnrollClick = async () => {
+    // 1. Require authentication
+    if (!user || !user._id) {
+      toast.info("Please log in to enroll in this course.");
+      navigate("/login");
+      return;
     }
-    if (user?.name) {
-      url.searchParams.set("studentName", user.name);
-    }
-    return url.toString();
-  };
 
-  const handleEnrollClick = () => {
-    if (status === "active") {
+    // 2. Already enrolled -> Navigate to course player
+    if (isEnrolled) {
       navigate(`/course-progress/${courseId}`);
       return;
     }
 
-    if (status === "pending") {
-      toast.info("Your enrollment application for this course is currently under review by our team.");
+    // 3. Application under review
+    if (enrollmentStatus === "pending") {
+      toast.info(
+        "Your enrollment application is currently under review by our team."
+      );
       return;
     }
 
-    // Open Google Form for 'none', 'unauthenticated', or 'rejected'
-    const targetUrl = getFormUrl();
-    toast.info("Opening Google Enrollment Form in a new tab...");
-    window.open(targetUrl, "_blank", "noopener,noreferrer");
+    try {
+      setIsSubmitting(true);
+
+      const res = await initiatePayment({ courseId }).unwrap();
+
+      if (res?.isFree) {
+        toast.success("Successfully enrolled in this free course!");
+        navigate(`/course-progress/${courseId}`);
+        return;
+      }
+
+      if (res?.gatewayUrl && res?.formData) {
+        toast.info("Redirecting to eSewa sandbox payment gateway...");
+
+        // Construct HTML form to POST fields securely to eSewa sandbox
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = res.gatewayUrl;
+
+        Object.entries(res.formData).forEach(([key, value]) => {
+          const hiddenInput = document.createElement("input");
+          hiddenInput.type = "hidden";
+          hiddenInput.name = key;
+          hiddenInput.value = value;
+          form.appendChild(hiddenInput);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        toast.error("Failed to generate payment session. Please try again.");
+      }
+    } catch (error) {
+      console.error("Course enrollment initiation error:", error);
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to initiate enrollment. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const isLoading = isStatusLoading || isDetailLoading;
+  const isProcessing = isInitiating || isSubmitting;
 
   if (isLoading) {
     return (
-      <Button disabled className="w-full bg-slate-300 dark:bg-slate-800 text-slate-600 py-6 rounded-xl font-bold">
+      <Button
+        disabled
+        className="w-full bg-slate-300 dark:bg-slate-800 text-slate-600 py-6 rounded-xl font-bold"
+      >
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         Checking Enrollment Status...
       </Button>
     );
   }
 
-  if (status === "active") {
+  // Already enrolled user -> direct access
+  if (isEnrolled) {
     return (
       <Button
-        onClick={handleEnrollClick}
+        onClick={() => navigate(`/course-progress/${courseId}`)}
         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6 rounded-xl font-bold shadow-md text-base flex items-center justify-center gap-2"
       >
         <CheckCircle2 className="w-5 h-5" />
@@ -71,7 +138,8 @@ const BuyCourseButton = ({ courseId }) => {
     );
   }
 
-  if (status === "pending") {
+  // Pending application
+  if (enrollmentStatus === "pending") {
     return (
       <Button
         onClick={handleEnrollClick}
@@ -83,24 +151,47 @@ const BuyCourseButton = ({ courseId }) => {
     );
   }
 
-  if (status === "rejected") {
+  // Free course enrollment button
+  if (isFree) {
     return (
       <Button
         onClick={handleEnrollClick}
-        className="w-full bg-[#FF5533] hover:bg-[#e04422] text-white py-6 rounded-xl font-bold shadow-md text-base flex items-center justify-center gap-2"
+        disabled={isProcessing}
+        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6 rounded-xl font-bold shadow-md text-base flex items-center justify-center gap-2 transition-all"
       >
-        <RotateCcw className="w-5 h-5" />
-        Re-Apply via Google Form
+        {isProcessing ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Enrolling in Free Course...
+          </>
+        ) : (
+          <>
+            <Sparkles className="w-4 h-4" />
+            Enroll for Free
+          </>
+        )}
       </Button>
     );
   }
 
+  // Paid course -> eSewa sandbox payment button
   return (
     <Button
       onClick={handleEnrollClick}
-      className="w-full bg-[#FF5533] hover:bg-[#e04422] text-white py-6 rounded-xl font-bold shadow-md text-base flex items-center justify-center gap-2"
+      disabled={isProcessing}
+      className="w-full bg-[#60bb46] hover:bg-[#52a43b] text-white py-6 rounded-xl font-bold shadow-md text-base flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99]"
     >
-      Enroll Now <ExternalLink className="w-4 h-4 ml-1" />
+      {isProcessing ? (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Securing Payment Session...
+        </>
+      ) : (
+        <>
+          <CreditCard className="w-4 h-4" />
+          Pay with eSewa (₹{coursePrice})
+        </>
+      )}
     </Button>
   );
 };

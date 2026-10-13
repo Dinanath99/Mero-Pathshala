@@ -15,6 +15,8 @@ import CourseDetail from "./pages/student/CourseDetail";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
 import StudentDashboard from "./pages/student/Dashboard"; // ✅ Import Student Dashboard
+import PaymentSuccess from "./pages/student/PaymentSuccess";
+import PaymentFailure from "./pages/student/PaymentFailure";
 
 // Admin Pages
 import Sidebar from "./pages/admin/Sidebar";
@@ -111,6 +113,18 @@ const appRouter = createBrowserRouter([
             </PurchaseCourseProtectedRoute>
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "payment/esewa/success",
+        element: (
+          <ProtectedRoute>
+            <PaymentSuccess />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "payment/esewa/failure",
+        element: <PaymentFailure />,
       },
 
       // 🔐 Admin routes

@@ -200,7 +200,7 @@ const CourseDetail = () => {
               </CardContent>
 
               <CardFooter className="p-5 pt-0">
-                <BuyCourseButton courseId={courseId} />
+                <BuyCourseButton courseId={courseId} course={course} purchased={purchased} />
               </CardFooter>
             </Card>
           </div>
