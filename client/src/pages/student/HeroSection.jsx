@@ -47,14 +47,17 @@ const HeroSection = () => {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages, isChatLoading]);
 
   const searchHandler = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/course/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(
+        `/course/search?query=${encodeURIComponent(searchQuery.trim())}`,
+      );
     }
   };
 
@@ -87,7 +90,8 @@ const HeroSection = () => {
           ...prev,
           {
             sender: "ai",
-            text: data.message || "Sorry, I ran into an error. Please try again.",
+            text:
+              data.message || "Sorry, I ran into an error. Please try again.",
           },
         ]);
       }
@@ -120,7 +124,10 @@ const HeroSection = () => {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl font-normal">
-              MeroPathshala is where students and top instructors meet — browse by tech stack, get <span className="text-[#FF5533] font-bold">smart-matched</span> to the right fit, and learn directly. No middlemen. No hidden fees.
+              MeroPathshala is where students and top instructors meet — browse
+              by tech stack, get{" "}
+              <span className="text-[#FF5533] font-bold">smart-matched</span> to
+              the right fit, and learn directly. No middlemen. No hidden fees.
             </p>
 
             {/* Dual Jodne Action Buttons */}
@@ -133,7 +140,11 @@ const HeroSection = () => {
                 <ChevronRight size={18} />
               </Button>
               <Button
-                onClick={() => navigate(user?.role === "instructor" ? "/admin/dashboard" : "/login")}
+                onClick={() =>
+                  navigate(
+                    user?.role === "instructor" ? "/admin/dashboard" : "/login",
+                  )
+                }
                 className="jodne-btn-secondary px-8 py-4 text-base"
               >
                 <span>I'm an instructor</span>
@@ -145,23 +156,34 @@ const HeroSection = () => {
               <div className="flex -space-x-2 overflow-hidden">
                 <Avatar className="inline-block h-9 w-9 rounded-full ring-2 ring-white dark:ring-slate-900">
                   <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" />
-                  <AvatarFallback className="bg-[#FF5533] text-white text-xs font-bold">A</AvatarFallback>
+                  <AvatarFallback className="bg-[#FF5533] text-white text-xs font-bold">
+                    A
+                  </AvatarFallback>
                 </Avatar>
                 <Avatar className="inline-block h-9 w-9 rounded-full ring-2 ring-white dark:ring-slate-900">
                   <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" />
-                  <AvatarFallback className="bg-slate-800 text-white text-xs font-bold">B</AvatarFallback>
+                  <AvatarFallback className="bg-slate-800 text-white text-xs font-bold">
+                    B
+                  </AvatarFallback>
                 </Avatar>
                 <Avatar className="inline-block h-9 w-9 rounded-full ring-2 ring-white dark:ring-slate-900">
                   <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" />
-                  <AvatarFallback className="bg-slate-700 text-white text-xs font-bold">C</AvatarFallback>
+                  <AvatarFallback className="bg-slate-700 text-white text-xs font-bold">
+                    C
+                  </AvatarFallback>
                 </Avatar>
                 <Avatar className="inline-block h-9 w-9 rounded-full ring-2 ring-white dark:ring-slate-900">
                   <AvatarImage src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" />
-                  <AvatarFallback className="bg-[#FF5533] text-white text-xs font-bold">D</AvatarFallback>
+                  <AvatarFallback className="bg-[#FF5533] text-white text-xs font-bold">
+                    D
+                  </AvatarFallback>
                 </Avatar>
               </div>
               <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
-                <strong className="text-slate-900 dark:text-white font-bold">123+ courses</strong> across 15 tech stacks ready for you today
+                <strong className="text-slate-900 dark:text-white font-bold">
+                  123+ courses
+                </strong>{" "}
+                across 15 tech stacks ready for you today
               </div>
             </div>
           </div>
@@ -175,15 +197,25 @@ const HeroSection = () => {
                   <Star size={14} className="fill-emerald-600" />
                 </div>
                 <div>
-                  <div className="text-xs font-black text-slate-900 dark:text-white leading-none">4.9 / 5</div>
-                  <div className="text-[10px] text-slate-500 font-semibold uppercase mt-0.5">Course Rating</div>
+                  <div className="text-xs font-black text-slate-900 dark:text-white leading-none">
+                    4.9 / 5
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-semibold uppercase mt-0.5">
+                    Course Rating
+                  </div>
                 </div>
               </div>
 
               {/* Search Bar inside Mockup */}
-              <form onSubmit={searchHandler} className="flex items-center gap-2 mb-4">
+              <form
+                onSubmit={searchHandler}
+                className="flex items-center gap-2 mb-4"
+              >
                 <div className="relative flex-1">
-                  <Search size={16} className="absolute left-3.5 top-3 text-slate-400" />
+                  <Search
+                    size={16}
+                    className="absolute left-3.5 top-3 text-slate-400"
+                  />
                   <Input
                     type="text"
                     value={searchQuery}
@@ -192,7 +224,10 @@ const HeroSection = () => {
                     className="w-full pl-9 pr-3 py-2 bg-slate-100 dark:bg-slate-900 border-none rounded-xl text-xs focus-visible:ring-1 focus-visible:ring-[#FF5533]"
                   />
                 </div>
-                <button type="submit" className="bg-[#111318] text-white p-2.5 rounded-xl hover:bg-slate-800 transition">
+                <button
+                  type="submit"
+                  className="bg-[#111318] text-white p-2.5 rounded-xl hover:bg-slate-800 transition"
+                >
                   <SlidersHorizontal size={15} />
                 </button>
               </form>
@@ -200,9 +235,15 @@ const HeroSection = () => {
               {/* Filter Pills Row */}
               <div className="flex items-center gap-2 overflow-x-auto pb-3 no-scrollbar text-xs">
                 <span className="jodne-pill-active cursor-pointer">All</span>
-                <span className="jodne-pill-inactive cursor-pointer">Development</span>
-                <span className="jodne-pill-inactive cursor-pointer">Data Science</span>
-                <span className="jodne-pill-inactive cursor-pointer">DevOps</span>
+                <span className="jodne-pill-inactive cursor-pointer">
+                  Development
+                </span>
+                <span className="jodne-pill-inactive cursor-pointer">
+                  Data Science
+                </span>
+                <span className="jodne-pill-inactive cursor-pointer">
+                  DevOps
+                </span>
               </div>
 
               {/* Smart Match Banner Pill */}
@@ -211,135 +252,18 @@ const HeroSection = () => {
                 <span>Smart match · 40 verified courses fit your goal</span>
               </div>
 
-              {/* Sample Course Cards inside Mockup */}
-              <div className="space-y-3 my-4">
-                <div className="p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between shadow-sm hover:border-[#FF5533]/40 transition">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9 rounded-xl border border-slate-200">
-                      <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" />
-                      <AvatarFallback className="bg-orange-100 text-[#FF5533]">MP</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1">
-                        MERN Stack Mastery <CheckCircle2 size={12} className="text-[#FF5533]" />
-                      </span>
-                      <span className="text-[10px] text-slate-500 uppercase font-semibold">Development · 34 Lectures</span>
-                    </div>
-                  </div>
-                  <Button onClick={() => navigate("/course/search")} className="bg-[#FF5533]/10 hover:bg-[#FF5533] text-[#FF5533] hover:text-white text-xs font-bold rounded-full px-3.5 py-1 h-auto transition">
-                    Enroll
-                  </Button>
-                </div>
-
-                <div className="p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between shadow-sm hover:border-[#FF5533]/40 transition">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9 rounded-xl border border-slate-200">
-                      <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" />
-                      <AvatarFallback className="bg-slate-200 text-slate-800">AS</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white">
-                        GenAI & Data Science
-                      </span>
-                      <span className="text-[10px] text-slate-500 uppercase font-semibold">AI & ML · 28 Lectures</span>
-                    </div>
-                  </div>
-                  <Button onClick={() => navigate("/course/search")} className="bg-[#FF5533]/10 hover:bg-[#FF5533] text-[#FF5533] hover:text-white text-xs font-bold rounded-full px-3.5 py-1 h-auto transition">
-                    Enroll
-                  </Button>
-                </div>
-              </div>
-
               {/* Bottom Floating 0% Fee Pill */}
               <div className="mt-4 p-2.5 rounded-2xl bg-orange-50/80 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900 flex items-center gap-2 text-xs">
                 <div className="w-6 h-6 rounded-lg bg-[#FF5533] text-white flex items-center justify-center font-bold text-[10px]">
                   0%
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-slate-900 dark:text-white">0% Platform Fee</span>
-                  <span className="text-[10px] text-slate-500">Students & instructors keep 100% value</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------- */}
-      {/* SECTION 2: HOW IT WORKS (Reference Screenshot 2) */}
-      {/* ------------------------------------------------------------- */}
-      <section className="py-20 bg-white dark:bg-[#111318] border-y border-slate-200/60 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <span className="text-xs font-bold tracking-widest text-[#FF5533] uppercase">
-              HOW IT WORKS
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
-              Everything you need to learn — and nothing in the way
-            </h2>
-            <p className="text-base text-slate-600 dark:text-slate-400">
-              From discovery to a signed-off rating, MeroPathshala keeps the whole flow direct between students and instructors.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 space-y-6">
-              <div className="w-10 h-10 rounded-2xl bg-[#FF5533]/10 text-[#FF5533] flex items-center justify-center font-bold">
-                <Search size={20} />
-              </div>
-              <span className="text-xs font-bold text-[#FF5533] uppercase tracking-wider block">DISCOVER</span>
-              <h3 className="text-3xl font-black text-slate-950 dark:text-white leading-tight">
-                Browse courses by niche & tech stack
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Filter 100+ vetted courses across 15 tech stacks and major programming frameworks. Open course previews, inspect real lectures, and enroll in what fits — no gatekeeping.
-              </p>
-              <ul className="space-y-3 pt-2 text-xs font-bold text-slate-800 dark:text-slate-200">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#FF5533]" /> Filter by stack, level & platform
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#FF5533]" /> Real curriculum preview on every course
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#FF5533]" /> Instant AI doubt resolution on demand
-                </li>
-              </ul>
-            </div>
-
-            <div className="lg:col-span-7 bg-[#F9F8F6] dark:bg-[#181B24] p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-inner">
-              <div className="flex items-center gap-2 overflow-x-auto mb-6">
-                <span className="jodne-pill-active">Development</span>
-                <span className="jodne-pill-inactive">Data Science</span>
-                <span className="jodne-pill-inactive">Mobile</span>
-                <span className="jodne-pill-inactive">DevOps</span>
-              </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-white dark:bg-[#111318] rounded-2xl border border-slate-200/80 dark:border-slate-700 flex items-center justify-between shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border border-slate-200">
-                      <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" />
-                      <AvatarFallback>NG</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Nikita Giri</h4>
-                      <span className="text-xs text-slate-500 font-medium">Development · Full-Stack React & Node</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-slate-500">4 Platforms</span>
-                </div>
-                <div className="p-4 bg-white dark:bg-[#111318] rounded-2xl border border-slate-200/80 dark:border-slate-700 flex items-center justify-between shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border border-slate-200">
-                      <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" />
-                      <AvatarFallback>AS</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Aditee Singh</h4>
-                      <span className="text-xs text-slate-500 font-medium">AI & Machine Learning · GenAI Masterclass</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-slate-500">3 Platforms</span>
+                  <span className="font-bold text-slate-900 dark:text-white">
+                    0% Platform Fee
+                  </span>
+                  <span className="text-[10px] text-slate-500">
+                    Students & instructors keep 100% value
+                  </span>
                 </div>
               </div>
             </div>
@@ -362,7 +286,8 @@ const HeroSection = () => {
                 Find authentic courses that truly elevate your career
               </h3>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Search courses by stack, level, and outcome. Read verified ratings from past learners. Enroll instantly. That's it.
+                Search courses by stack, level, and outcome. Read verified
+                ratings from past learners. Enroll instantly. That's it.
               </p>
 
               <ul className="space-y-4 pt-2 text-xs font-semibold text-slate-300">
@@ -406,7 +331,9 @@ const HeroSection = () => {
                 Get discovered by eager students across Nepal
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Build your studio profile once. Eager students find your content. Publish courses on your terms, host lectures, and earn directly.
+                Build your studio profile once. Eager students find your
+                content. Publish courses on your terms, host lectures, and earn
+                directly.
               </p>
 
               <ul className="space-y-4 pt-2 text-xs font-bold text-slate-800 dark:text-slate-200">
@@ -416,7 +343,9 @@ const HeroSection = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <Send size={16} className="text-[#FF5533]" />
-                  <span>Upload lectures directly with Cloudinary integration</span>
+                  <span>
+                    Upload lectures directly with Cloudinary integration
+                  </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Award size={16} className="text-[#FF5533]" />
@@ -424,14 +353,20 @@ const HeroSection = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <Users size={16} className="text-[#FF5533]" />
-                  <span>Direct student questions & ratings compound over time</span>
+                  <span>
+                    Direct student questions & ratings compound over time
+                  </span>
                 </li>
               </ul>
             </div>
 
             <div className="pt-8">
               <Button
-                onClick={() => navigate(user?.role === "instructor" ? "/admin/dashboard" : "/login")}
+                onClick={() =>
+                  navigate(
+                    user?.role === "instructor" ? "/admin/dashboard" : "/login",
+                  )
+                }
                 className="jodne-btn-primary px-8 py-3.5 text-sm"
               >
                 <span>Create instructor profile</span>
@@ -456,7 +391,8 @@ const HeroSection = () => {
             Ready to make your next learning breakthrough?
           </h2>
           <p className="text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
-            Join thousands of students and instructors connecting directly on MeroPathshala — free to start, no middlemen, no hidden fees.
+            Join thousands of students and instructors connecting directly on
+            MeroPathshala — free to start, no middlemen, no hidden fees.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <Button
